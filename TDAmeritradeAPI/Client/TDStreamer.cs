@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using TDAmeritradeAPI.Models.UserInfo_Preferences;
 using TDAmeritradeAPI.Props;
+using Utf8Json;
+using Utf8Json.Resolvers;
 using Websocket.Client;
 
 namespace TDAmeritradeAPI.Client
@@ -94,7 +95,7 @@ namespace TDAmeritradeAPI.Client
                 client.MessageReceived.Subscribe(msg => Console.WriteLine($"Message received: {msg}"));
                 client.Start();
 
-                var req = JsonConvert.SerializeObject(request, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var req = JsonSerializer.Serialize(request, StandardResolver.ExcludeNull);
                 Task.Run(() => client.Send(req));
                 exitEvent.WaitOne();
             }

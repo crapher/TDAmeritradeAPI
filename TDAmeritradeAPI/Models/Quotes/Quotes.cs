@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using TDAmeritradeAPI.Utilities;
+using Utf8Json;
 
 namespace TDAmeritradeAPI.Models.Quotes
 {
-    [JsonConverter(typeof(QuoteConverter))]
+    [JsonFormatter(typeof(QuoteConverter))]
     public class QuoteList
     {
         public List<Quote> Quotes { get; set; }
@@ -43,9 +43,9 @@ namespace TDAmeritradeAPI.Models.Quotes
         public bool shortable { get; set; }
         public float volatility { get; set; }
         public int digits { get; set; }
-        [JsonProperty("52WkHigh")]
+        [DataMember(Name = "52WkHigh")]
         public float _52WkHigh { get; set; }
-        [JsonProperty("52WkLow")]
+        [DataMember(Name = "52WkLow")]
         public float _52WkLow { get; set; }
         public float nAV { get; set; }
         public float peRatio { get; set; }

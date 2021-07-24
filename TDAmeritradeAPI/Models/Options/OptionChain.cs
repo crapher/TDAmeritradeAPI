@@ -1,193 +1,192 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace TDAmeritradeAPI.Models.Options
 {
     public class OptionChain
     {
-
-        [JsonProperty("symbol")]
+        [DataMember(Name = "symbol")]
         public string Symbol { get; set; }
 
-        [JsonProperty("status")]
+        [DataMember(Name = "status")]
         public string Status { get; set; }
 
-        [JsonProperty("underlying")]
+        [DataMember(Name = "underlying")]
         public Underlying underlying { get; set; }
 
-        [JsonProperty("strategy")]
+        [DataMember(Name = "strategy")]
         public string Strategy { get; set; }
 
-        [JsonProperty("interval")]
+        [DataMember(Name = "interval")]
         public object Interval { get; set; }
 
-        [JsonProperty("isDelayed")]
+        [DataMember(Name = "isDelayed")]
         public bool IsDelayed { get; set; }
 
-        [JsonProperty("isIndex")]
+        [DataMember(Name = "isIndex")]
         public bool IsIndex { get; set; }
 
-        [JsonProperty("interestRate")]
+        [DataMember(Name = "interestRate")]
         public double InterestRate { get; set; }
 
-        [JsonProperty("underlyingPrice")]
+        [DataMember(Name = "underlyingPrice")]
         public double UnderlyingPrice { get; set; }
 
-        [JsonProperty("volatility")]
+        [DataMember(Name = "volatility")]
         public long Volatility { get; set; }
 
-        [JsonProperty("daysToExpiration")]
+        [DataMember(Name = "daysToExpiration")]
         public long DaysToExpiration { get; set; }
 
-        [JsonProperty("numberOfContracts")]
+        [DataMember(Name = "numberOfContracts")]
         public long numberOfContracts { get; set; }
         public float[] intervals { get; set; }
         public MonthlyStrategyList[] monthlyStrategyList { get; set; }
 
-        [JsonProperty("callExpDateMap")]
+        [DataMember(Name = "callExpDateMap")]
         public Dictionary<string, Dictionary<string, ExpDateMap[]>> CallExpDateMap { get; set; }
 
-        [JsonProperty("putExpDateMap")]
+        [DataMember(Name = "putExpDateMap")]
         public Dictionary<string, Dictionary<string, ExpDateMap[]>> PutExpDateMap { get; set; }
 
         public class ExpDateMap
         {
-            [JsonProperty("putCall")]
+            [DataMember(Name = "putCall")]
             public string PutCall { get; set; }
 
-            [JsonProperty("symbol")]
+            [DataMember(Name = "symbol")]
             public string Symbol { get; set; }
 
-            [JsonProperty("description")]
+            [DataMember(Name = "description")]
             public string Description { get; set; }
 
-            [JsonProperty("exchangeName")]
+            [DataMember(Name = "exchangeName")]
             public string ExchangeName { get; set; }
 
-            [JsonProperty("bid")]
+            [DataMember(Name = "bid")]
             public double Bid { get; set; }
 
-            [JsonProperty("ask")]
+            [DataMember(Name = "ask")]
             public double Ask { get; set; }
 
-            [JsonProperty("last")]
+            [DataMember(Name = "last")]
             public double Last { get; set; }
 
-            [JsonProperty("mark")]
+            [DataMember(Name = "mark")]
             public double Mark { get; set; }
 
-            [JsonProperty("bidSize")]
+            [DataMember(Name = "bidSize")]
             public long BidSize { get; set; }
 
-            [JsonProperty("askSize")]
+            [DataMember(Name = "askSize")]
             public long AskSize { get; set; }
 
-            [JsonProperty("lastSize")]
+            [DataMember(Name = "lastSize")]
             public long LastSize { get; set; }
 
-            [JsonProperty("highPrice")]
+            [DataMember(Name = "highPrice")]
             public double HighPrice { get; set; }
 
-            [JsonProperty("lowPrice")]
+            [DataMember(Name = "lowPrice")]
             public double LowPrice { get; set; }
 
-            [JsonProperty("openPrice")]
+            [DataMember(Name = "openPrice")]
             public long OpenPrice { get; set; }
 
-            [JsonProperty("closePrice")]
+            [DataMember(Name = "closePrice")]
             public double ClosePrice { get; set; }
 
-            [JsonProperty("totalVolume")]
+            [DataMember(Name = "totalVolume")]
             public long TotalVolume { get; set; }
 
-            [JsonProperty("tradeDate")]
+            [DataMember(Name = "tradeDate")]
             public object TradeDate { get; set; }
 
-            [JsonProperty("tradeTimeInLong")]
+            [DataMember(Name = "tradeTimeInLong")]
             public long TradeTimeInLong { get; set; }
 
-            [JsonProperty("quoteTimeInLong")]
+            [DataMember(Name = "quoteTimeInLong")]
             public long QuoteTimeInLong { get; set; }
 
-            [JsonProperty("netChange")]
+            [DataMember(Name = "netChange")]
             public double NetChange { get; set; }
 
-            [JsonProperty("volatility")]
+            [DataMember(Name = "volatility")]
             public double Volatility { get; set; }
 
-            [JsonProperty("delta")]
+            [DataMember(Name = "delta")]
             public double Delta { get; set; }
 
-            [JsonProperty("gamma")]
+            [DataMember(Name = "gamma")]
             public double Gamma { get; set; }
 
-            [JsonProperty("theta")]
+            [DataMember(Name = "theta")]
             public double Theta { get; set; }
 
-            [JsonProperty("vega")]
+            [DataMember(Name = "vega")]
             public double Vega { get; set; }
 
-            [JsonProperty("rho")]
+            [DataMember(Name = "rho")]
             public double Rho { get; set; }
 
-            [JsonProperty("openInterest")]
+            [DataMember(Name = "openInterest")]
             public long OpenInterest { get; set; }
 
-            [JsonProperty("timeValue")]
+            [DataMember(Name = "timeValue")]
             public double TimeValue { get; set; }
 
-            [JsonProperty("theoreticalOptionValue")]
+            [DataMember(Name = "theoreticalOptionValue")]
             public double TheoreticalOptionValue { get; set; }
 
-            [JsonProperty("theoreticalVolatility")]
+            [DataMember(Name = "theoreticalVolatility")]
             public long TheoreticalVolatility { get; set; }
 
-            [JsonProperty("optionDeliverablesList")]
+            [DataMember(Name = "optionDeliverablesList")]
             public object OptionDeliverablesList { get; set; }
 
-            [JsonProperty("strikePrice")]
+            [DataMember(Name = "strikePrice")]
             public double StrikePrice { get; set; }
 
-            [JsonProperty("expirationDate")]
+            [DataMember(Name = "expirationDate")]
             public long ExpirationDate { get; set; }
 
-            [JsonProperty("daysToExpiration")]
+            [DataMember(Name = "daysToExpiration")]
             public long DaysToExpiration { get; set; }
 
-            [JsonProperty("expirationType")]
+            [DataMember(Name = "expirationType")]
             public string ExpirationType { get; set; }
 
-            [JsonProperty("lastTradingDay")]
+            [DataMember(Name = "lastTradingDay")]
             public long LastTradingDay { get; set; }
 
-            [JsonProperty("multiplier")]
+            [DataMember(Name = "multiplier")]
             public long Multiplier { get; set; }
 
-            [JsonProperty("settlementType")]
+            [DataMember(Name = "settlementType")]
             public string SettlementType { get; set; }
 
-            [JsonProperty("deliverableNote")]
+            [DataMember(Name = "deliverableNote")]
             public string DeliverableNote { get; set; }
 
-            [JsonProperty("isIndexOption")]
+            [DataMember(Name = "isIndexOption")]
             public object IsIndexOption { get; set; }
 
-            [JsonProperty("percentChange")]
+            [DataMember(Name = "percentChange")]
             public double PercentChange { get; set; }
 
-            [JsonProperty("markChange")]
+            [DataMember(Name = "markChange")]
             public double MarkChange { get; set; }
 
-            [JsonProperty("markPercentChange")]
+            [DataMember(Name = "markPercentChange")]
             public double MarkPercentChange { get; set; }
 
-            [JsonProperty("nonStandard")]
+            [DataMember(Name = "nonStandard")]
             public bool NonStandard { get; set; }
 
-            [JsonProperty("inTheMoney")]
+            [DataMember(Name = "inTheMoney")]
             public bool InTheMoney { get; set; }
 
-            [JsonProperty("mini")]
+            [DataMember(Name = "mini")]
             public bool Mini { get; set; }
         }
 
@@ -243,73 +242,73 @@ namespace TDAmeritradeAPI.Models.Options
 
         public class Underlying
         {
-            [JsonProperty("symbol")]
+            [DataMember(Name = "symbol")]
             public string Symbol { get; set; }
 
-            [JsonProperty("description")]
+            [DataMember(Name = "description")]
             public string Description { get; set; }
 
-            [JsonProperty("change")]
+            [DataMember(Name = "change")]
             public long Change { get; set; }
 
-            [JsonProperty("percentChange")]
+            [DataMember(Name = "percentChange")]
             public long PercentChange { get; set; }
 
-            [JsonProperty("close")]
+            [DataMember(Name = "close")]
             public double Close { get; set; }
 
-            [JsonProperty("quoteTime")]
+            [DataMember(Name = "quoteTime")]
             public long QuoteTime { get; set; }
 
-            [JsonProperty("tradeTime")]
+            [DataMember(Name = "tradeTime")]
             public long TradeTime { get; set; }
 
-            [JsonProperty("bid")]
+            [DataMember(Name = "bid")]
             public double Bid { get; set; }
 
-            [JsonProperty("ask")]
+            [DataMember(Name = "ask")]
             public double Ask { get; set; }
 
-            [JsonProperty("last")]
+            [DataMember(Name = "last")]
             public double Last { get; set; }
 
-            [JsonProperty("mark")]
+            [DataMember(Name = "mark")]
             public double Mark { get; set; }
 
-            [JsonProperty("markChange")]
+            [DataMember(Name = "markChange")]
             public long MarkChange { get; set; }
 
-            [JsonProperty("markPercentChange")]
+            [DataMember(Name = "markPercentChange")]
             public long MarkPercentChange { get; set; }
 
-            [JsonProperty("bidSize")]
+            [DataMember(Name = "bidSize")]
             public long BidSize { get; set; }
 
-            [JsonProperty("askSize")]
+            [DataMember(Name = "askSize")]
             public long AskSize { get; set; }
 
-            [JsonProperty("highPrice")]
+            [DataMember(Name = "highPrice")]
             public double HighPrice { get; set; }
 
-            [JsonProperty("lowPrice")]
+            [DataMember(Name = "lowPrice")]
             public double LowPrice { get; set; }
 
-            [JsonProperty("openPrice")]
+            [DataMember(Name = "openPrice")]
             public double OpenPrice { get; set; }
 
-            [JsonProperty("totalVolume")]
+            [DataMember(Name = "totalVolume")]
             public long TotalVolume { get; set; }
 
-            [JsonProperty("exchangeName")]
+            [DataMember(Name = "exchangeName")]
             public string ExchangeName { get; set; }
 
-            [JsonProperty("fiftyTwoWeekHigh")]
+            [DataMember(Name = "fiftyTwoWeekHigh")]
             public double FiftyTwoWeekHigh { get; set; }
 
-            [JsonProperty("fiftyTwoWeekLow")]
+            [DataMember(Name = "fiftyTwoWeekLow")]
             public double FiftyTwoWeekLow { get; set; }
 
-            [JsonProperty("delayed")]
+            [DataMember(Name = "delayed")]
             public bool Delayed { get; set; }
         }
     }

@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
-using System;
+﻿using RestSharp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Utf8Json;
+using Utf8Json.Resolvers;
 
 namespace TDAmeritradeAPI.Client
 {
@@ -26,12 +26,10 @@ namespace TDAmeritradeAPI.Client
         private async Task<TDResponse<T>> ExecuteEndPoint<T>(string endPoint, Dictionary<string, object> requestParams, Method method)
         {
             IRestResponse response;
-            TDResponse<T> instance;
             bool tryAgain = false;
 
             do
             {
-                instance = (TDResponse<T>)Activator.CreateInstance(typeof(TDResponse<T>));
                 _client = new RestClient(endPoint);
                 _request = new RestRequest(method);
                 _request.AddHeader("Authorization", $"Bearer {AccessToken}");
@@ -52,7 +50,8 @@ namespace TDAmeritradeAPI.Client
                 tryAgain = !tryAgain && !CheckAccessTokenValidity(response); // Retry only once
             } while (tryAgain);
 
-            var result = JsonConvert.DeserializeObject<T>(response.Content);
+            var result = JsonSerializer.Deserialize<T>(response.Content);
+            var instance = new TDResponse<T>();
             instance.Data = result;
             return instance;
         }
@@ -60,22 +59,21 @@ namespace TDAmeritradeAPI.Client
         private async Task<TDResponse<T>> ExecuteEndPoint<T>(string endPoint, object settings, Method method)
         {
             IRestResponse response;
-            TDResponse<T> instance;
             bool tryAgain = false;
 
             do
             {
-                instance = (TDResponse<T>)Activator.CreateInstance(typeof(TDResponse<T>));
                 _client = new RestClient(endPoint);
                 _request = new RestRequest(method);
                 _request.AddHeader("Authorization", $"Bearer {AccessToken}");
-                settings = JsonConvert.SerializeObject(settings, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                settings = JsonSerializer.Serialize(settings, StandardResolver.ExcludeNull);
                 _request.AddJsonBody(settings);
                 response = _client.Execute(_request);
                 tryAgain = !tryAgain && !CheckAccessTokenValidity(response); // Retry only once
             } while (tryAgain);
 
-            var result = JsonConvert.DeserializeObject<T>(response.Content);
+            var result = JsonSerializer.Deserialize<T>(response.Content);
+            var instance = new TDResponse<T>();
             instance.Success = response.IsSuccessful;
             instance.Data = result;
             instance.Error = response.ErrorMessage;

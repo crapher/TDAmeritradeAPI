@@ -1,48 +1,42 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TDAmeritradeAPI.Models.Quotes;
+using Utf8Json;
 
 namespace TDAmeritradeAPI.Utilities
 {
-    public class QuoteConverter : JsonConverter
+    public class QuoteConverter : IJsonFormatter<QuoteList>
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public void Serialize(ref JsonWriter writer, QuoteList value, IJsonFormatterResolver formatterResolver)
         {
             var list = (QuoteList)value;
 
-            writer.WriteStartObject();
+            writer.WriteBeginObject();
 
             foreach (var p in list.Quotes)
             {
                 writer.WritePropertyName(p.symbol);
-                serializer.Serialize(writer, p);
+                formatterResolver.GetFormatterWithVerify<Quote>().Serialize(ref writer, p, formatterResolver);
             }
 
             writer.WriteEndObject();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public QuoteList Deserialize(ref JsonReader reader, IJsonFormatterResolver formatterResolver)
         {
-            var jo = serializer.Deserialize<JObject>(reader);
+            var quotesBySymbol = formatterResolver.GetFormatterWithVerify<Dictionary<string, Quote>>().Deserialize(ref reader, formatterResolver);
+
             var result = new QuoteList();
             result.Quotes = new List<Quote>();
 
-            foreach (var prop in jo.Properties())
+            foreach (var k in quotesBySymbol.Keys)
             {
-                var p = prop.Value.ToObject<Quote>();
+                var p = quotesBySymbol[k];
                 // set name from property name
-                p.symbol = prop.Name;
+                p.symbol = k;
                 result.Quotes.Add(p);
             }
 
             return result;
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(QuoteList);
         }
     }
 }

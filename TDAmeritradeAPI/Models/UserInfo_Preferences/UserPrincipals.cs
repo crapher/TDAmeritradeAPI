@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace TDAmeritradeAPI.Models.UserInfo_Preferences
 {
@@ -70,11 +69,11 @@ namespace TDAmeritradeAPI.Models.UserInfo_Preferences
         public class SurrogateIds
         {
             public string SCARR { get; set; }
-            [JsonProperty("Market Edge")]
+            [DataMember(Name = "Market Edge")]
             public string MarketEdge { get; set; }
             public string Zacks { get; set; }
             public string Localytics { get; set; }
-            [JsonProperty("Market Watch")]
+            [DataMember(Name = "Market Watch")]
             public string MarketWatch { get; set; }
             public string Flybits { get; set; }
             public string BOZEL { get; set; }

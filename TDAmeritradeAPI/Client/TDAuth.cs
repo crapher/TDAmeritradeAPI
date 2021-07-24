@@ -1,8 +1,8 @@
 ﻿using Microsoft.Win32;
-using Newtonsoft.Json;
 using RestSharp;
 using System.Diagnostics;
 using TDAmeritradeAPI.Models.Auth;
+using Utf8Json;
 
 namespace TDAmeritradeAPI.Client
 {
@@ -35,7 +35,7 @@ namespace TDAmeritradeAPI.Client
             request.AddParameter("code", code);
             request.AddParameter("redirect_uri", redirectUri);
             var response = client.Execute(request);
-            return JsonConvert.DeserializeObject<AuthToken>(response.Content);
+            return JsonSerializer.Deserialize<AuthToken>(response.Content);
         }
         /// <summary>
         /// Update refresh token with refresh token (Once every 90 days)
@@ -54,7 +54,7 @@ namespace TDAmeritradeAPI.Client
             request.AddParameter("client_id", clientId);
             request.AddParameter("redirect_uri", "");
             var response = client.Execute(request);
-            return JsonConvert.DeserializeObject<AuthToken>(response.Content);
+            return JsonSerializer.Deserialize<AuthToken>(response.Content);
         }
         /// <summary>
         /// Update access token with refresh token (Once every 30 minutes)
@@ -73,7 +73,7 @@ namespace TDAmeritradeAPI.Client
             request.AddParameter("client_id", clientId);
             request.AddParameter("redirect_uri", "");
             var response = client.Execute(request);
-            return JsonConvert.DeserializeObject<AuthToken>(response.Content);
+            return JsonSerializer.Deserialize<AuthToken>(response.Content);
         }
         /// <summary>
         /// Gets location of Chrome.exe
