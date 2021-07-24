@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TDAmeritradeAPI.Models.Accounts_Trading
 {
@@ -68,6 +66,5 @@ namespace TDAmeritradeAPI.Models.Accounts_Trading
             public float price { get; set; }
             public DateTime time { get; set; }
         }
-
     }
 }

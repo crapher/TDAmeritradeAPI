@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using Microsoft.VisualBasic.CompilerServices;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TDAmeritradeAPI.Models.Price_History;
+using System;
+using System.Collections.Generic;
 using TDAmeritradeAPI.Models.Quotes;
 
 namespace TDAmeritradeAPI.Utilities

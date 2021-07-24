@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TDAmeritradeAPI.Client
+﻿namespace TDAmeritradeAPI.Client
 {
     public class TDResponse<T>
     {

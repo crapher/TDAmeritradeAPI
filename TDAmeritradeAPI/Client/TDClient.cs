@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RestSharp;
-using TDAmeritradeAPI.Props;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TDAmeritradeAPI.Client
 {
@@ -13,33 +10,48 @@ namespace TDAmeritradeAPI.Client
     {
         private RestRequest _request;
         private RestClient _client;
-        private string AccessToken { get; }
-        private string ClientId { get; }
+        private string _clientId;
+        private string _refreshToken;
+        public string AccessToken { get; private set; }
         public TDClient(string accessToken)
         {
             AccessToken = accessToken;
         }
-
+        public TDClient(string clientId, string refreshToken, string accessToken = null)
+        {
+            _clientId = clientId;
+            _refreshToken = refreshToken;
+            AccessToken = !string.IsNullOrWhiteSpace(accessToken) ? accessToken : TDAuth.GetAccessToken(clientId, refreshToken).access_token;
+        }
         private async Task<TDResponse<T>> ExecuteEndPoint<T>(string endPoint, Dictionary<string, object> requestParams, Method method)
         {
-            var instance = (TDResponse<T>)Activator.CreateInstance(typeof(TDResponse<T>));
-            _client = new RestClient(endPoint);
-            _request = new RestRequest(method);
-            _request.AddHeader("Authorization", $"Bearer {AccessToken}");
+            IRestResponse response;
+            TDResponse<T> instance;
+            bool tryAgain = false;
 
-            if (requestParams != null)
+            do
             {
-                foreach (var p in requestParams)
+                instance = (TDResponse<T>)Activator.CreateInstance(typeof(TDResponse<T>));
+                _client = new RestClient(endPoint);
+                _request = new RestRequest(method);
+                _request.AddHeader("Authorization", $"Bearer {AccessToken}");
+
+                if (requestParams != null)
                 {
-                    //TODO: Review != 0
-                    if (p.Value != null)
+                    foreach (var p in requestParams)
                     {
-                        _request.AddParameter(p.Key, p.Value);
+                        //TODO: Review != 0
+                        if (p.Value != null)
+                        {
+                            _request.AddParameter(p.Key, p.Value);
+                        }
                     }
                 }
-            }
 
-            var response = _client.Execute(_request);
+                response = _client.Execute(_request);
+                tryAgain = !tryAgain && !CheckAccessTokenValidity(response); // Retry only once
+            } while (tryAgain);
+
             var result = JsonConvert.DeserializeObject<T>(response.Content);
             instance.Data = result;
             return instance;
@@ -47,19 +59,47 @@ namespace TDAmeritradeAPI.Client
 
         private async Task<TDResponse<T>> ExecuteEndPoint<T>(string endPoint, object settings, Method method)
         {
-            var instance = (TDResponse<T>)Activator.CreateInstance(typeof(TDResponse<T>));
-            _client = new RestClient(endPoint);
-            _request = new RestRequest(method);
-            _request.AddHeader("Authorization", $"Bearer {AccessToken}");
-            settings = JsonConvert.SerializeObject(settings, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            _request.AddJsonBody(settings);
-            var response = _client.Execute(_request);
+            IRestResponse response;
+            TDResponse<T> instance;
+            bool tryAgain = false;
+
+            do
+            {
+                instance = (TDResponse<T>)Activator.CreateInstance(typeof(TDResponse<T>));
+                _client = new RestClient(endPoint);
+                _request = new RestRequest(method);
+                _request.AddHeader("Authorization", $"Bearer {AccessToken}");
+                settings = JsonConvert.SerializeObject(settings, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                _request.AddJsonBody(settings);
+                response = _client.Execute(_request);
+                tryAgain = !tryAgain && !CheckAccessTokenValidity(response); // Retry only once
+            } while (tryAgain);
+
             var result = JsonConvert.DeserializeObject<T>(response.Content);
             instance.Success = response.IsSuccessful;
             instance.Data = result;
             instance.Error = response.ErrorMessage;
             return instance;
         }
-
+        /// <summary>
+        /// Check if the response is successful or failed
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns>false if a token refresh was required else true</returns>
+        private bool CheckAccessTokenValidity(IRestResponse response)
+        {
+            // Without client ID or Refresh Token we cannot get a new access token
+            if (string.IsNullOrWhiteSpace(_clientId) || string.IsNullOrWhiteSpace(_refreshToken))
+                return true;
+            // if the status is Unauthorized. Refresh the access token.
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                var authToken = TDAuth.GetRefreshToken(_clientId, _refreshToken);
+                AccessToken = authToken.access_token;
+                return false;
+            }
+            // Any other StatusCode return true and should be handled by the client
+            return true;
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace TDAmeritradeAPI.Fields
+﻿namespace TDAmeritradeAPI.Fields
 {
     public class Options
     {
@@ -64,5 +62,5 @@ namespace TDAmeritradeAPI.Fields
                 DEC = "DEC";
         }
     }
-    
+
 }

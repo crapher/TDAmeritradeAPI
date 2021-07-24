@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 using TDAmeritradeAPI.Utilities;
 
 namespace TDAmeritradeAPI.Models.Quotes
@@ -46,9 +43,9 @@ namespace TDAmeritradeAPI.Models.Quotes
         public bool shortable { get; set; }
         public float volatility { get; set; }
         public int digits { get; set; }
-        [JsonProperty("52WkHigh")] 
+        [JsonProperty("52WkHigh")]
         public float _52WkHigh { get; set; }
-        [JsonProperty("52WkLow")] 
+        [JsonProperty("52WkLow")]
         public float _52WkLow { get; set; }
         public float nAV { get; set; }
         public float peRatio { get; set; }

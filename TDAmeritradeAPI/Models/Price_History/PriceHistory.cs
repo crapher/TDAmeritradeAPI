@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TDAmeritradeAPI.Models.Price_History
+﻿namespace TDAmeritradeAPI.Models.Price_History
 {
     /// <summary>
     /// Used for getting price history for a symbol

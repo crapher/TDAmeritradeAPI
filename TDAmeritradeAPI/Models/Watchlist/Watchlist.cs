@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TDAmeritradeAPI.Models.Watchlist
+﻿namespace TDAmeritradeAPI.Models.Watchlist
 {
     public class Watchlist
     {

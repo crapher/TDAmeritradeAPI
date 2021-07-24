@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TDAmeritradeAPI.Models.Market_Hours
+﻿namespace TDAmeritradeAPI.Models.Market_Hours
 {
     public class MarketHours
     {

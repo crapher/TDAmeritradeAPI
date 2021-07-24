@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Text;
-
-namespace TDAmeritradeAPI.Props
+﻿namespace TDAmeritradeAPI.Props
 {
     public class StreamerSettings
     {
@@ -26,9 +21,9 @@ namespace TDAmeritradeAPI.Props
             public string credential { get; set; }
             public string token { get; set; }
             public string version { get; set; }
-            public string? keys { get; set; }
-            public string? fields { get; set; }
-            public string? qoslevel { get; set; }
+            public string keys { get; set; }
+            public string fields { get; set; }
+            public string qoslevel { get; set; }
         }
         public class Credentials
         {

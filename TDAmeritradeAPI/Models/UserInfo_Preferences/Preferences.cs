@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TDAmeritradeAPI.Models.UserInfo_Preferences
+﻿namespace TDAmeritradeAPI.Models.UserInfo_Preferences
 {
     public class Preferences
     {

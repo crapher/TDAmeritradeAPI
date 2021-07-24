@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Streamer\" />
-    <Folder Include="Properties\" />
+    <Compile Remove="Models\Streamer\**" />
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Models\Streamer\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Models\Streamer\**" />
+    <None Remove="Properties\**" />
   </ItemGroup>
 
   <ItemGroup>

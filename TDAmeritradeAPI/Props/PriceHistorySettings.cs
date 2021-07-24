@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TDAmeritradeAPI.Fields;
-
-namespace TDAmeritradeAPI.Props
+﻿namespace TDAmeritradeAPI.Props
 {
     public class PriceHistorySettings
     {

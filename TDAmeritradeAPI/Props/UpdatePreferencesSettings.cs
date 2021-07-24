@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TDAmeritradeAPI.Props
+﻿namespace TDAmeritradeAPI.Props
 {
     /// <summary>
     /// Used for updating preferences for a specific account

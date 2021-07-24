@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace TDAmeritradeAPI.Fields
+﻿namespace TDAmeritradeAPI.Fields
 {
     /// <summary>
     /// Used for getting price history

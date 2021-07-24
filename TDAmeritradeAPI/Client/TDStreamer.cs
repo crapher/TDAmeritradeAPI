@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using TDAmeritradeAPI.Models.UserInfo_Preferences;
 using TDAmeritradeAPI.Props;
 using Websocket.Client;
@@ -19,6 +18,7 @@ namespace TDAmeritradeAPI.Client
         private StreamerSettings.Request _loginRequest;
         private StreamerSettings.Request _TIMESALE_FUTURES;
         private WebsocketClient _ws;
+
         public TDStreamer(UserPrincipals userPrincipals)
         {
             _credentials = new StreamerSettings.Credentials
@@ -57,7 +57,7 @@ namespace TDAmeritradeAPI.Client
                     qoslevel = "0"
                 }
             };
-     
+
             _reqs.Add(_loginRequest);
 
             _TIMESALE_FUTURES = new StreamerSettings.Request
@@ -73,6 +73,7 @@ namespace TDAmeritradeAPI.Client
                     fields = "0,1,2,3,4"
                 }
             };
+
             _reqs.Add(_TIMESALE_FUTURES);
 
             var request = new StreamerSettings.Requests()
@@ -80,7 +81,7 @@ namespace TDAmeritradeAPI.Client
                 requests = _reqs.ToArray()
             };
 
-            
+
             var exitEvent = new ManualResetEvent(false);
 
             var url = new Uri($"wss://{userPrincipals.streamerInfo.streamerSocketUrl}/ws");
@@ -93,11 +94,10 @@ namespace TDAmeritradeAPI.Client
                 client.MessageReceived.Subscribe(msg => Console.WriteLine($"Message received: {msg}"));
                 client.Start();
 
-                var req = JsonConvert.SerializeObject(request, Formatting.None, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+                var req = JsonConvert.SerializeObject(request, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 Task.Run(() => client.Send(req));
                 exitEvent.WaitOne();
             }
-
 
             Console.ReadLine();
         }

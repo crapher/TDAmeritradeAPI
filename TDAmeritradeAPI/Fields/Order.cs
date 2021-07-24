@@ -1,6 +1,4 @@
-﻿using System.Security.Authentication;
-
-namespace TDAmeritradeAPI.Fields
+﻿namespace TDAmeritradeAPI.Fields
 {
     public static class Order
     {

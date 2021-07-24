@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-
-namespace TDAmeritradeAPI.Models.Accounts_Trading
+﻿namespace TDAmeritradeAPI.Models.Accounts_Trading
 {
     public class Accounts
     {

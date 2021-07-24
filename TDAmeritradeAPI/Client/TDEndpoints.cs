@@ -1,14 +1,10 @@
-﻿using System;
+﻿using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using RestSharp;
 using TDAmeritradeAPI.Fields;
 using TDAmeritradeAPI.Models.Accounts_Trading;
-using TDAmeritradeAPI.Models.Auth;
 using TDAmeritradeAPI.Models.Instruments;
 using TDAmeritradeAPI.Models.Market_Hours;
 using TDAmeritradeAPI.Models.Movers;

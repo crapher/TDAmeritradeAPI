@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TDAmeritradeAPI.Fields
+﻿namespace TDAmeritradeAPI.Fields
 {
     /// <summary>
     /// Used for getting transactions
