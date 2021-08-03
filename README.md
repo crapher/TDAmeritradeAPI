@@ -143,7 +143,7 @@ This is the list of the subscription/events exposed by the streamer client.
 - TIMESALE_OPTIONS (Implemented - **NEW**)
 
 # Getting started (API)
-**TOKENS_FILE** is the file generated in the Configuration File Genetation (First Time) Section
+**TOKENS_FILE** is the file generated in the Configuration File Genetation (First Time) Section<br>
 **CONSUMER_KEY** is in the Keys tab in the TD Ameritrade app)
     
     var client = new TDClient(TOKENS_FILE, CONSUMER_KEY);
@@ -155,7 +155,7 @@ Check the **TDAmeritradeAPI.Example** project for full example information
 
 # Getting started (Streamer)
 
-**TOKENS_FILE** is the file generated in the Configuration File Genetation (First Time) Section
+**TOKENS_FILE** is the file generated in the Configuration File Genetation (First Time) Section<br>
 **CONSUMER_KEY** is in the Keys tab in the TD Ameritrade app)
 
     
