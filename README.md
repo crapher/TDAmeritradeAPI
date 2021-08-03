@@ -16,11 +16,11 @@ These are the steps to generate the file with the tokens.
     Replace the CONSUMER_KEY with the Consumer Key (It is in the Keys tab in the TD Ameritrade app)
 2) After this, you will be redirected to the REDIRECT_URL.  The URL querystring contains a code parameter, copy the value (Do NOT copy the code=)
 3) Open the URL https://url-decode.com/, paste the value in the white box and click the button URL Decode.  This is going to give us the URL decoded value that will be used in the next step.
-4) Open the URL https://developer.tdameritrade.com/authentication/apis/post/token-0.  Enter the following values:
-	a) grant_type: authorization_code
-	b) access_token: offline
-	c) code: The URL decoded value generated in step 3
-	d) client_id: CONSUMER_KEY
+4) Open the URL https://developer.tdameritrade.com/authentication/apis/post/token-0. Enter the following values:
+	a) grant_type: authorization_code<br>
+	b) access_token: offline<br>
+	c) code: The URL decoded value generated in step 3<br>
+	d) client_id: CONSUMER_KEY<br>
 	e) redirect_url: REDIRECT_URL
 5) Click SEND
 6) If everything is correct, you should receive a 200 successful and the response tab should have a json string.  Copy the whole json string to a file. (This file is the one we will be used)
