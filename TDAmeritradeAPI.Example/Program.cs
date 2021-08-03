@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using TDAmeritradeAPI.Client;
 using TDAmeritradeAPI.Fields;
 using TDAmeritradeAPI.Props;
@@ -10,42 +9,10 @@ namespace TDAmeritradeAPI.Example
     {
         static void Main(string[] args)
         {
-            bool useTokenGeneration = false;
-            TDClient client = null;
-            if (useTokenGeneration)
-            {
-                /// ***** OPTION 1: REFRESH TOKEN GENERATION - START ***** ///
-                // On the first execution, it may be ideal to place a breakpoint on the TDAuth.GetAccessToken method
-                // Once you get the code and get the accessToken, comment out TDAuth.GetAuthCode and the TDAuth.GetAccessToken methods so they do not run again during your test.
-                // This execution flow of obtaining the accessToken may be confusing and annoying but I believe you will understand why once you get more familiar with TD's api. 
-                // On the positive side, the Web example is less annoying :D
-                var clientId = "";
-                var redirectUri = "";
-
-                /* Get Code */
-                // This will open up Chrome browser -- login in your TD account
-                // You will be redirected to your redirectUri with the code
-                //TDAuth.GetAuthCode(clientId, redirectUri);
-                // Copy the code and paste it below
-                var code = HttpUtility.UrlDecode("CODE_FROM_REDIRECT_URL");
-
-                /* Get AccessToken */
-                var accessToken = TDAuth.GetAccessToken(clientId, code, redirectUri).access_token;
-
-                //var accessToken = "";
-                client = new TDClient(accessToken);
-                /// ***** REFRESH TOKEN GENERATION - END ***** ///
-            }
-            else
-            {
-                /// ***** KNOWN REFRESH TOKEN (USED TO GENERATE ACCESS TOKEN AUTOMATICALLY WHEN IT EXPIRES) - START **** ///
-                var clientId = "";
-                var refreshToken = "";
-                var accessToken = "";
-
-                client = new TDClient(clientId, refreshToken, accessToken);
-                /// ***** KNOWN REFRESH TOKEN (USED TO GENERATE ACCESS TOKEN AUTOMATICALLY WHEN IT EXPIRES) - END **** ///
-            }
+            /* Client */
+			string fileName = "{FILENAME}";
+            string clientId = "{CONSUMER_KEY}";
+            TDClient client = new TDClient(fileName, clientId);
 
             /* Get Market Hours */
             //var hours = client.GetHoursForMultipleMarkets(new[] {MarketType.Bond, MarketType.Equity}, "2020-03-23");
@@ -99,10 +66,7 @@ namespace TDAmeritradeAPI.Example
             //var keys = client.GetStreamerSubKeys(new[] {""});
 
             /* Get User Principals */
-            var userPrincipals = client.GetUserPrincipals(new[] { "streamerSubscriptionKeys", "streamerConnectionInfo", "preferences", "surrogateIds" }).Result.Data;
-
-            /* Steamer */
-            //var streamer = new TDStreamer(userPrincipals);
+            //var userPrincipals = client.GetUserPrincipals(new[] { "streamerSubscriptionKeys", "streamerConnectionInfo", "preferences", "surrogateIds" }).Result.Data;
 
             /* Update Preferences */
             var updatePreferencesSettings = new UpdatePreferencesSettings
@@ -117,8 +81,8 @@ namespace TDAmeritradeAPI.Example
                 mutualFundTaxLotMethod = TaxLotMethod.LIFO,
                 optionTaxLotMethod = TaxLotMethod.LIFO,
                 equityTaxLotMethod = TaxLotMethod.LIFO,
-                defaultAdvancedToolLaunch = AvancedToolLaunch.N,
-                authTokenTimeout = AuthTokenTimeOut.Fifty_Five_Minutes
+                defaultAdvancedToolLaunch = AdvancedToolLaunch.N,
+                authTokenTimeout = AuthTokenTimeOut.FiftyFiveMinutes
             };
             //var update = client.UpdatePreferences(accounts[0].securitiesAccount.accountId, updatePreferencesSettings).Result.Success;
 
@@ -159,7 +123,7 @@ namespace TDAmeritradeAPI.Example
             /* Place Option Vertical Spread */
             var order2 = new OrderSettings
             {
-                orderType = Order.Type.Net_Credit,
+                orderType = Order.Type.NetCredit,
                 session = Order.MarketSession.Normal,
                 duration = Order.Duration.GTC,
                 price = 4.50,
@@ -168,7 +132,7 @@ namespace TDAmeritradeAPI.Example
                 {
                     new OrderSettings.OrderLegCollection
                     {
-                        instruction = Order.Instruction.Sell_To_Open,
+                        instruction = Order.Instruction.SellToOpen,
                         quantity = 1,
                         instrument = new OrderSettings.OrderLegCollection.Instrument
                         {
@@ -178,7 +142,7 @@ namespace TDAmeritradeAPI.Example
                     },
                     new OrderSettings.OrderLegCollection
                     {
-                        instruction = Order.Instruction.Buy_To_Open,
+                        instruction = Order.Instruction.BuyToOpen,
                         quantity = 1,
                         instrument = new OrderSettings.OrderLegCollection.Instrument
                         {
@@ -217,6 +181,14 @@ namespace TDAmeritradeAPI.Example
             /* Cancel Order */
             //var cancelOrder = client.CancelOrder("", "");
 
+            /* Instruments */
+            //var instSymbolSearch = client.SearchInstruments("X", Instruments.SymbolSearch).Result.Data;
+            //var instSymbolRegex = client.SearchInstruments(@"T.*", Instruments.SymbolRegex).Result.Data;
+            //var instDescSearch = client.SearchInstruments("ADR", Instruments.DescSearch).Result.Data;
+            //var instDescRegex = client.SearchInstruments(@".*Bond.*", Instruments.DescRegex).Result.Data;
+            //var instFundamentals = client.SearchInstruments("AAPL", Instruments.Fundamentals).Result.Data;
+
+            //var instBycusip = client.GetInstrument("00206R102").Result.Data;
         }
     }
 }

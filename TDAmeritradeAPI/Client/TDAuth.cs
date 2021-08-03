@@ -1,86 +1,116 @@
-﻿using Microsoft.Win32;
-using RestSharp;
-using System.Diagnostics;
-using TDAmeritradeAPI.Models.Auth;
+﻿using RestSharp;
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using TDAmeritradeAPI.Models.API.Auth;
 using Utf8Json;
+using Utf8Json.Resolvers;
 
 namespace TDAmeritradeAPI.Client
 {
-    public static class TDAuth
+    internal static class TDAuth
     {
-        private const string AuthUrl = "https://api.tdameritrade.com/v1/oauth2/token";
-        /// <summary>
-        /// Get code to get access token. This is for console app.
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <param name="redirectUri"></param>
-        public static void GetAuthCode(string clientId, string redirectUri)
+        private const string kAuthUrl = "https://api.tdameritrade.com/v1/oauth2/token";
+
+        public async static Task<AuthToken> GetAuthTokenFromFile(string tokensFile, string clientId, bool refreshIfNeeded = false)
         {
-            Process.Start(ChromeAppFileName, $"https://auth.tdameritrade.com/oauth?client_id={clientId}@AMER.OAUTHAP&response_type=code&redirect_uri={redirectUri}");
+            if (string.IsNullOrWhiteSpace(tokensFile))
+                throw new ArgumentNullException("tokensFile is NULL");
+
+            if (string.IsNullOrWhiteSpace(clientId))
+                throw new ArgumentNullException("clientId is NULL or empty");
+
+            string authTokensStr = File.ReadAllText(tokensFile);
+            var authToken = JsonSerializer.Deserialize<AuthToken>(authTokensStr);
+
+            authToken = await UpdateRefreshToken(tokensFile, authToken, clientId, refreshIfNeeded);
+            return authToken;
         }
-        /// <summary>
-        /// Get refresh and access token from Auth Code
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <param name="code"></param>
-        /// <param name="redirectUri"></param>
-        /// <returns></returns>
-        public static AuthToken GetAccessToken(string clientId, string code, string redirectUri)
+
+        public async static Task<AuthToken> UpdateAccessToken(string tokensFile, AuthToken authToken, string clientId)
         {
-            var client = new RestClient(AuthUrl);
-            var request = new RestRequest(Method.POST);
-            request.AddParameter("grant_type", "authorization_code");
-            request.AddParameter("client_id", clientId);
-            request.AddParameter("access_type", "offline");
-            request.AddParameter("code", code);
-            request.AddParameter("redirect_uri", redirectUri);
-            var response = client.Execute(request);
-            return JsonSerializer.Deserialize<AuthToken>(response.Content);
+            if (null == authToken)
+                throw new ArgumentNullException("authToken is NULL");
+
+            var token = await GetAccessToken(clientId, authToken.refresh_token);
+
+            using var fs = new FileStream(tokensFile, FileMode.Open, FileAccess.ReadWrite);
+            authToken.access_token = token.access_token;
+            authToken.expires_in = token.expires_in;
+
+            using var ws = new StreamWriter(fs);
+            var authTokenRaw = JsonSerializer.Serialize<AuthToken>(authToken, StandardResolver.ExcludeNull);
+            var authTokenString = Encoding.UTF8.GetString(authTokenRaw);
+            ws.Write(authTokenString);
+
+            return authToken;
         }
-        /// <summary>
-        /// Update refresh token with refresh token (Once every 90 days)
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <param name="refreshToken"></param>
-        /// <returns></returns>
-        public static AuthToken GetRefreshToken(string clientId, string refreshToken)
+
+        private async static Task<AuthToken> UpdateRefreshToken(string tokensFile, AuthToken authToken, string clientId, bool refreshIfNeeded)
         {
-            var client = new RestClient(AuthUrl);
+            if (!refreshIfNeeded || null == authToken)
+                return authToken;
+
+            if (null == authToken.refresh_token)
+                throw new ArgumentNullException("RefreshToken is NULL");
+
+            if (null != authToken.refresh_token_expiration_date && DateTime.MinValue != authToken.refresh_token_expiration_date &&
+                authToken.refresh_token_expiration_date.AddDays(-30) > DateTime.UtcNow.Date)
+                return authToken;
+
+            using var fs = new FileStream(tokensFile, FileMode.Open, FileAccess.ReadWrite);
+            authToken = await GetRefreshToken(clientId, authToken.refresh_token);
+            authToken.refresh_token_expiration_date = DateTime.UtcNow.AddSeconds(authToken.refresh_token_expires_in);
+
+            using var ws = new StreamWriter(fs);
+            var authTokenRaw = JsonSerializer.Serialize<AuthToken>(authToken, StandardResolver.ExcludeNull);
+            var authTokenString = Encoding.UTF8.GetString(authTokenRaw);
+            ws.Write(authTokenString);
+
+            return authToken;
+        }
+
+        private async static Task<AuthToken> GetRefreshToken(string clientId, string refreshToken)
+        {
+            var client = new RestClient(kAuthUrl);
+            client.Proxy = TDClient.Proxy;
+
             var request = new RestRequest(Method.POST);
             request.AddParameter("grant_type", "refresh_token");
             request.AddParameter("refresh_token", refreshToken);
             request.AddParameter("access_type", "offline");
-            request.AddParameter("code", "");
+            request.AddParameter("code", string.Empty);
             request.AddParameter("client_id", clientId);
-            request.AddParameter("redirect_uri", "");
-            var response = client.Execute(request);
+            request.AddParameter("redirect_uri", string.Empty);
+
+            var response = await client.ExecuteAsync(request);
+
+            if (!response.IsSuccessful)
+                throw new Exception(response.StatusDescription);
+
             return JsonSerializer.Deserialize<AuthToken>(response.Content);
         }
-        /// <summary>
-        /// Update access token with refresh token (Once every 30 minutes)
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <param name="refreshToken"></param>
-        /// <returns></returns>
-        public static AuthToken GetAccessToken(string clientId, string refreshToken)
+
+        private async static Task<AuthToken> GetAccessToken(string clientId, string refreshToken)
         {
-            var client = new RestClient(AuthUrl);
+            var client = new RestClient(kAuthUrl);
+            client.Proxy = TDClient.Proxy;
+
             var request = new RestRequest(Method.POST);
             request.AddParameter("grant_type", "refresh_token");
             request.AddParameter("refresh_token", refreshToken);
-            request.AddParameter("access_type", "");
-            request.AddParameter("code", "");
+            request.AddParameter("access_type", string.Empty);
+            request.AddParameter("code", string.Empty);
             request.AddParameter("client_id", clientId);
-            request.AddParameter("redirect_uri", "");
-            var response = client.Execute(request);
+            request.AddParameter("redirect_uri", string.Empty);
+
+            var response = await client.ExecuteAsync(request);
+
+            if (!response.IsSuccessful)
+                throw new Exception(response.StatusDescription);
+
             return JsonSerializer.Deserialize<AuthToken>(response.Content);
         }
-        /// <summary>
-        /// Gets location of Chrome.exe
-        /// </summary>
-        private const string ChromeAppKey = @"\Software\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe";
-        private static string ChromeAppFileName =>
-            (string)(Registry.GetValue("HKEY_LOCAL_MACHINE" + ChromeAppKey, "", null) ??
-                     Registry.GetValue("HKEY_CURRENT_USER" + ChromeAppKey, "", null));
     }
 }

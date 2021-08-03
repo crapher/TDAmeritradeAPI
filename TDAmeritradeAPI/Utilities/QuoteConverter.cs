@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TDAmeritradeAPI.Models.Quotes;
+using TDAmeritradeAPI.Models.API.Quotes;
 using Utf8Json;
 
 namespace TDAmeritradeAPI.Utilities
@@ -8,11 +8,9 @@ namespace TDAmeritradeAPI.Utilities
     {
         public void Serialize(ref JsonWriter writer, QuoteList value, IJsonFormatterResolver formatterResolver)
         {
-            var list = (QuoteList)value;
-
             writer.WriteBeginObject();
 
-            foreach (var p in list.Quotes)
+            foreach (var p in value.Quotes)
             {
                 writer.WritePropertyName(p.symbol);
                 formatterResolver.GetFormatterWithVerify<Quote>().Serialize(ref writer, p, formatterResolver);
@@ -26,16 +24,17 @@ namespace TDAmeritradeAPI.Utilities
             var quotesBySymbol = formatterResolver.GetFormatterWithVerify<Dictionary<string, Quote>>().Deserialize(ref reader, formatterResolver);
 
             var result = new QuoteList();
-            result.Quotes = new List<Quote>();
+            var quotes = new List<Quote>();
 
             foreach (var k in quotesBySymbol.Keys)
             {
                 var p = quotesBySymbol[k];
                 // set name from property name
                 p.symbol = k;
-                result.Quotes.Add(p);
+                quotes.Add(p);
             }
 
+            result.Quotes = quotes.ToArray();
             return result;
         }
     }

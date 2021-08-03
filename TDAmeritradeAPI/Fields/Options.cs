@@ -6,7 +6,7 @@
         {
             public const string
                 Standard = "S",
-                Non_Standard = "NS",
+                NonStandard = "NS",
                 All = "ALL";
         }
         public static class ContractType
@@ -19,12 +19,12 @@
         public static class Range
         {
             public const string
-                In_The_Money = "ITM",
-                Near_The_Money = "NTM",
-                Out_Of_The_Money = "OTM",
-                Strikes_Above_Market = "SAK",
-                Strikes_Below_Market = "SBK",
-                Strikes_Near_Market = "SNK",
+                InTheMoney = "ITM",
+                NearTheMoney = "NTM",
+                OutOfTheMoney = "OTM",
+                StrikesAboveMarket = "SAK",
+                StrikesBelowMarket = "SBK",
+                StrikesNearMarket = "SNK",
                 ALL = "ALL";
         }
 
@@ -62,5 +62,4 @@
                 DEC = "DEC";
         }
     }
-
 }

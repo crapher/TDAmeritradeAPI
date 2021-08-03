@@ -24,7 +24,13 @@
             public string keys { get; set; }
             public string fields { get; set; }
             public string qoslevel { get; set; }
+            public string symbol { get; set; }
+            public string frequency { get; set; }
+            public string period { get; set; }
+            public long? START_TIME { get; set; }
+            public long? END_TIME { get; set; }
         }
+
         public class Credentials
         {
             public string userid { get; set; }

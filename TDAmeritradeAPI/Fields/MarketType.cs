@@ -2,19 +2,16 @@
 {
     public static class MarketType
     {
-        /// <summary>
-        /// Used for getting market hour(s)
-        /// </summary>
         public const string
             Bond = "BOND",
             Equity = "EQUITY",
             ETF = "ETF",
             Forex = "FOREX",
             Future = "FUTURE",
-            Future_Option = "FUTURE_OPTION",
+            FutureOption = "FUTURE_OPTION",
             Index = "INDEX",
             Indicator = "INDICATOR",
-            Mutual_Fund = "MUTAL_FUND",
+            MutualFund = "MUTAL_FUND",
             Option = "OPTION",
             Unknown = "UNKNOWN";
     }

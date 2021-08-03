@@ -1,8 +1,5 @@
 ﻿namespace TDAmeritradeAPI.Fields
 {
-    /// <summary>
-    /// Used for getting price history
-    /// </summary>
     public static class FrequencyType
     {
         public const string
